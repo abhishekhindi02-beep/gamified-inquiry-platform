@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Sparkles, Check, Layers } from 'lucide-react';
 import { MathRenderer } from './MathRenderer';
+import { apiClient } from '../services/apiClient';
 
 export function ContentReader({ articles, selectedArticleId, onSelectArticle, onAttachContext, currentContext }) {
   const [article, setArticle] = useState(null);
@@ -9,10 +10,9 @@ export function ContentReader({ articles, selectedArticleId, onSelectArticle, on
   useEffect(() => {
     if (selectedArticleId) {
       setLoading(true);
-      fetch(`/api/content/${selectedArticleId}`)
-        .then(res => res.json())
+      apiClient.getArticleById(selectedArticleId)
         .then(data => {
-          if (data.success) {
+          if (data && data.success) {
             setArticle(data.article);
           }
         })
